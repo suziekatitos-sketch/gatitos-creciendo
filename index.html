@@ -6,11 +6,12 @@
 <title>Gatitos en racha</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap">
 <style>
-:root{--bg:#fdf1f6;--card:#fff;--ink:#3b1f3a;--mut:#8a6a86;--pink:#e85d8a;--mint:#6fcfa8;--lav:#b9a4e6;--line:#f0d6e3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#241528;--card:#33203a;--ink:#fbe9f2;--mut:#c9a6c2;--line:#4a2f52;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#241528;--card:#33203a;--ink:#fbe9f2;--mut:#c9a6c2;--line:#4a2f52;color-scheme:dark}
+:root{--bg:#f3e9dc;--card:#fffaf2;--ink:#4a3426;--mut:#8c7260;--pink:#9a6240;--mint:#b9c79a;--lav:#c9a27a;--line:#e6d5c0;--on:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a211b;--card:#3a2e25;--ink:#f3e6d6;--mut:#c4ab94;--line:#54433a;--pink:#d49a6a;--mint:#8fa273;--on:#2a1a10;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#2a211b;--card:#3a2e25;--ink:#f3e6d6;--mut:#c4ab94;--line:#54433a;--pink:#d49a6a;--mint:#8fa273;--on:#2a1a10;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 'Nunito',system-ui,sans-serif}
 main{max-width:520px;margin:0 auto;padding:18px 16px 40px}
 h1{font:600 26px 'Fredoka',sans-serif;margin:0 0 14px;text-align:center}
@@ -21,14 +22,22 @@ h1{font:600 26px 'Fredoka',sans-serif;margin:0 0 14px;text-align:center}
 .heart{font-size:30px;color:var(--pink);animation:beat 1.6s ease-in-out infinite}
 @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
 @media (prefers-reduced-motion:reduce){.heart{animation:none}}
-.tabs{display:flex;gap:6px;margin:18px 0 10px}
-.tabs button{flex:1;font:600 15px 'Fredoka',sans-serif;padding:10px 6px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tabs button[aria-selected="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
-ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.row{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:10px 12px}
+.av{width:78px;height:78px;border-radius:50%;overflow:hidden;border:3px solid var(--line);background:var(--bg);padding:0;display:grid;place-items:center;color:inherit}
+.av img{width:100%;height:100%;object-fit:cover}.av.nop{border-color:transparent;background:none;overflow:visible}button.av{cursor:pointer}.cam{color:var(--mut);font-size:12px}
+.inb{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:12px 14px;margin-top:12px}
+.inb p{margin:6px 0;overflow-wrap:anywhere}.inb em{font-style:normal;background:var(--pink);color:var(--on);border-radius:999px;padding:1px 8px;font-size:12px}
+.inb small,.mut{color:var(--mut)}
+.tabs{display:flex;gap:6px;margin:18px 0 10px;overflow-x:auto;padding-bottom:2px}
+.tabs button{flex:1 0 auto;font:600 15px 'Fredoka',sans-serif;padding:10px 14px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;white-space:nowrap;max-width:60%;overflow:hidden;text-overflow:ellipsis}
+.tabs button[aria-selected="true"]{background:var(--pink);border-color:var(--pink);color:var(--on)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+ul,ol{list-style:none;margin:0;padding:0}
+#list{display:flex;flex-direction:column;gap:10px}
+.row,.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:10px 12px}
+.row{display:flex;align-items:center;gap:12px}
+.pair{display:flex;gap:6px}
 .paw{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--bg);font-size:20px;cursor:pointer;color:var(--ink)}
-.paw.on{background:var(--mint);border-color:var(--mint);color:#16402f;font-weight:700}
+.paw.on{background:var(--mint);border-color:var(--mint);color:#2a3418;font-weight:700}
 .paw:disabled{cursor:default;opacity:.85}
 .nm{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .nm span.t{overflow-wrap:anywhere;font-weight:600}
@@ -36,19 +45,33 @@ ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10p
 .dots{display:flex;gap:5px}
 .dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
 .dots i.on{background:var(--pink)}
-.pair{display:flex;gap:6px}
+.dots i.off{background:transparent;border:2px dashed var(--line)}
 .x{flex:none;border:0;background:transparent;font-size:18px;color:var(--mut);cursor:pointer;padding:8px}
+.rh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}.rh b{flex:1;min-width:0;overflow-wrap:anywhere}
+.steps{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.st{width:100%;text-align:left;font:inherit;display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.st.on{background:var(--mint);border-color:var(--mint);color:#2a3418}.st i{margin-left:auto;font-style:normal;font-size:13px}.st:disabled{cursor:default}
+.sec{font:600 15px 'Fredoka',sans-serif;color:var(--mut);margin-top:8px}
 .empty{text-align:center;color:var(--mut);padding:22px 10px}
 .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px;color:var(--mut);font-size:14px}
-.bar button{border:0;background:none;color:var(--pink);font:600 14px 'Nunito',sans-serif;cursor:pointer;padding:6px}
-form{display:flex;gap:8px;margin-top:14px}
-form select,form input{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:10px}
+.bar button,.lk{border:0;background:none;color:var(--pink);font:600 14px 'Nunito',sans-serif;cursor:pointer;padding:6px}
+form{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+form select,form input,form textarea{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:10px}
 form select{flex:none}
 form input{flex:1;min-width:0}
-form button{flex:none;font:600 15px 'Fredoka',sans-serif;border:0;border-radius:16px;background:var(--pink);color:#fff;padding:0 16px;cursor:pointer}
-#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+form textarea{flex:1 1 100%;resize:vertical}
+form button[type=submit]{flex:none;font:600 15px 'Fredoka',sans-serif;border:0;border-radius:16px;background:var(--pink);color:var(--on);padding:10px 16px;cursor:pointer}
+.col{flex-direction:column}
+.dp{flex:1 1 100%;display:flex;gap:6px}
+.dp button{flex:1;padding:8px 0;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--mut);font:600 13px 'Nunito',sans-serif;cursor:pointer}
+.dp button[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:var(--on)}
+#sheet{position:fixed;inset:0;z-index:20}
+.bk{position:absolute;inset:0;background:rgba(40,25,15,.5)}
+.pn{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));max-height:85%;overflow:auto;display:flex;flex-direction:column;gap:8px;max-width:520px;margin:0 auto}
+.pn ul{display:flex;flex-direction:column;gap:8px}.pn li{display:flex;align-items:center;gap:4px}
+.msg{flex:1;text-align:left;font:inherit;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;max-width:90%;text-align:center}
 #toast.show{opacity:1}
-.col{flex-direction:column}form button.lk,.lk{background:none;color:var(--pink);padding:8px;border:0;cursor:pointer;font:600 14px Nunito,sans-serif}
 </style>
 </head>
 <body>
@@ -56,6 +79,7 @@ form button{flex:none;font:600 15px 'Fredoka',sans-serif;border:0;border-radius:
 <h1>Gatitos en racha</h1>
 <div id="app"><p class="empty">Cargando…</p></div>
 </main>
+<div id="sheet" hidden></div>
 <div id="toast" role="status"></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -69,12 +93,16 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const today=()=>ymd(new Date());
+const dateOf=k=>new Date(k+'T12:00:00');
 const last7=()=>[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return ymd(d)});
+const hm=()=>new Date().toTimeString().slice(0,5);
+const ago=t=>{const m=Math.round((Date.now()-t)/6e4);return m<1?'ahora':m<60?`hace ${m} min`:m<1440?`hace ${Math.round(m/60)} h`:`hace ${Math.round(m/1440)} d`};
+const DOW=['D','L','M','M','J','V','S'],ORD=[1,2,3,4,5,6,0];
+const DEF={motivar:['¡Tú puedes, falta poquito! 🐾','Yo ya hice el mío, ¿y tú? 😼','Hazlo por nosotros 💗','Aquí estoy contigo, ánimo 🤍'],celebrar:['¡Lo lograste! Qué orgullo 💗','Eres lo máximo, bien hecho 🎉','Ronroneo de felicitación 😻','Gracias por cuidarte 🤎']};
 const cat=(c,e)=>`<svg viewBox="0 0 80 72" width="72" height="66" aria-hidden="true"><path d="M10 30 L14 4 L34 16Z M70 30 L66 4 L46 16Z" fill="${c}"/><path d="M15 14 L17 9 L26 15Z M65 14 L63 9 L54 15Z" fill="${e}"/><ellipse cx="40" cy="42" rx="31" ry="26" fill="${c}"/><circle cx="29" cy="40" r="3.4" fill="#2a1830"/><circle cx="51" cy="40" r="3.4" fill="#2a1830"/><circle cx="30" cy="39" r="1" fill="#fff"/><circle cx="52" cy="39" r="1" fill="#fff"/><path d="M37 47h6l-3 3.5z" fill="#e85d8a"/><path d="M40 50.5v2M40 52.5q-3 3-6 1M40 52.5q3 3 6 1" stroke="#2a1830" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="22" cy="48" rx="4.5" ry="2.8" fill="${e}" opacity=".7"/><ellipse cx="58" cy="48" rx="4.5" ry="2.8" fill="${e}" opacity=".7"/></svg>`;
 
-
-let me,pid=null,tab='mine',edit=false,reg=false,pend='',creating=false,started=false,db,auth;
-const S={h:{},d:{},j:[],n:{}};
+let me,pid=null,tab='mine',edit=false,reg=false,pend='',creating=false,started=false,db,auth,P={},PL=[],sel=[0,1,2,3,4,5,6];
+const S={h:{},d:{},j:[],r:{},ms:[],sent:{},n:{},ph:{}};
 const subs={};
 let q=Promise.resolve();
 const W=f=>{q=q.then(f).catch(()=>toast('No se pudo guardar. Revisa tu conexión.'))};
@@ -82,69 +110,128 @@ function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');cl
 const docs=s=>s.docs.map(x=>({id:x.id,...x.data()}));
 const dmap=s=>{const m={};s.docs.forEach(x=>m[x.id]=x.data()||{});return m};
 function listen(k,path,fn){if(subs[k])return;subs[k]=onSnapshot(collection(db,path),s=>{fn(s);render()},()=>toast('No pude leer los datos compartidos.'))}
-const chk=(u,id)=>!!(S.d[u]?.[today()]?.d||{})[id];
-const count=u=>{const ids=(S.h[u]||[]).map(h=>h.id).concat(S.j.map(j=>j.id));return [ids.filter(i=>chk(u,i)).length,ids.length]};
-const dots=(f)=>`<span class="dots" aria-hidden="true">${last7().map(k=>`<i class="${f(k)?'on':''}"></i>`).join('')}</span>`;
-const mark=(u,k,id)=>!!(S.d[u]?.[k]?.d||{})[id];
+const day=(u,k)=>S.d[u]?.[k]||{};
+const mark=(u,k,id)=>!!(day(u,k).d||{})[id];
+const chk=(u,id)=>mark(u,today(),id);
+const sched=(h,k)=>!h.days||h.days.includes(dateOf(k).getDay());
+const dlabel=h=>!h.days||h.days.length>6?'':ORD.filter(i=>h.days.includes(i)).map(i=>DOW[i]).join(' ');
+const count=u=>{const k=today(),ids=(S.h[u]||[]).concat(S.j).filter(h=>sched(h,k)).map(h=>h.id);return [ids.filter(i=>chk(u,i)).length,ids.length]};
+const dots=(h,f)=>`<span class="dots" aria-hidden="true">${last7().map(k=>`<i class="${h&&!sched(h,k)?'off':f(k)?'on':''}"></i>`).join('')}</span>`;
+function streak(h,u){let n=0;const d=new Date();for(let i=0;i<120;i++){const k=ymd(d);d.setDate(d.getDate()-1);if(!sched(h,k))continue;const ok=u==='both'?(pid&&mark(me,k,h.id)&&mark(pid,k,h.id)):mark(u,k,h.id);if(ok)n++;else if(i)break}return n}
+const flame=n=>n>1?` <small class="mut">🔥${n}</small>`:'';
 const paw=(on,id,dis)=>`<button class="paw ${on?'on':''}" ${dis?'disabled':`data-a="t" data-id="${id}"`} aria-pressed="${on}" aria-label="${on?'Hecho':'Pendiente'}">${on?'✓':'🐾'}</button>`;
+const purr=(ref,done)=>`<button class="x" data-a="purr" data-ref="${esc(ref)}" data-done="${done?1:0}" aria-label="Enviar ronroneo">💗</button>`;
+const delb=(k,id)=>edit?`<button class="x" data-a="del" data-k="${k}" data-id="${id}" aria-label="Borrar">✕</button>`:'';
 const pname=()=>S.n[pid]||'Tu gatito';
+const rsteps=(u,r)=>day(u,today()).r?.[r.id]||{};
+const rfull=(u,k,r)=>{const m=day(u,k).r?.[r.id]||{};return r.steps.length>0&&r.steps.every(s=>m[s.id])};
 
+function routineCard(r,u,mine){
+  const m=rsteps(u,r),n=r.steps.filter(s=>m[s.id]).length,ts=Object.values(m).sort(),last=ts[ts.length-1];
+  return `<li class="card"><div class="rh"><b>${esc(r.emoji||'🌙')} ${esc(r.name)}</b><span class="mut">${n}/${r.steps.length}${r.time?' · meta '+esc(r.time):''}</span>${mine?delb('r',r.id):purr(r.name,n===r.steps.length)}</div>${dots(null,k=>rfull(u,k,r))}<ol class="steps">${r.steps.map(s=>`<li><button class="st ${m[s.id]?'on':''}" ${mine?`data-a="rs" data-r="${r.id}" data-id="${s.id}"`:'disabled'}>${m[s.id]?'✓':'○'} ${esc(s.text)}<i>${esc(m[s.id]||'')}</i></button></li>`).join('')}</ol>${last?`<small class="mut">Último paso: ${esc(last)}</small>`:''}</li>`;
+}
 function rows(){
-  const mine=S.h[me]||[],theirs=S.h[pid]||[];
+  const k=today(),mine=S.h[me]||[],theirs=S.h[pid]||[];
   if(tab==='mine'){
     if(!mine.length)return '<li class="empty">Aún no tienes hábitos. Agrega el primero abajo.</li>';
-    return mine.map(h=>`<li class="row">${paw(chk(me,h.id),h.id)}<div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}</span>${dots(k=>mark(me,k,h.id))}</div>${edit?`<button class="x" data-a="del" data-k="m" data-id="${h.id}" aria-label="Borrar">✕</button>`:''}</li>`).join('');
+    return mine.map(h=>{const rest=!sched(h,k),dl=dlabel(h);return `<li class="row">${paw(chk(me,h.id),h.id,rest)}<div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}${flame(streak(h,me))}</span>${dots(h,x=>mark(me,x,h.id))}${rest?'<small>Hoy descansa 😴</small>':dl?`<small>${dl}</small>`:''}</div>${delb('m',h.id)}</li>`}).join('');
   }
   if(tab==='joint'){
     if(!S.j.length)return '<li class="empty">Aún no tienen hábitos juntos. Agreguen el primero abajo.</li>';
-    return S.j.map(h=>`<li class="row"><div class="pair">${paw(chk(me,h.id),h.id)}${pid?paw(chk(pid,h.id),h.id,true):''}</div><div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}</span>${dots(k=>mark(me,k,h.id)&&pid&&mark(pid,k,h.id))}<small>${chk(me,h.id)&&pid&&chk(pid,h.id)?'¡Los dos lo lograron hoy!':'Se cuenta cuando ambos lo marcan'}</small></div>${edit?`<button class="x" data-a="del" data-k="j" data-id="${h.id}" aria-label="Borrar">✕</button>`:''}</li>`).join('');
+    return S.j.map(h=>{const rest=!sched(h,k),dl=dlabel(h),both=pid&&chk(me,h.id)&&chk(pid,h.id);return `<li class="row"><div class="pair">${paw(chk(me,h.id),h.id,rest)}${pid?paw(chk(pid,h.id),h.id,true):''}</div><div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}${flame(streak(h,'both'))}</span>${dots(h,x=>mark(me,x,h.id)&&pid&&mark(pid,x,h.id))}<small>${rest?'Hoy descansan 😴':both?'¡Los dos lo lograron hoy!':'Se cuenta cuando ambos lo marcan'}${dl?' · '+dl:''}</small></div>${delb('j',h.id)}</li>`}).join('');
+  }
+  if(tab==='rut'){
+    const rs=S.r[me]||[];
+    return rs.length?rs.map(r=>routineCard(r,me,true)).join(''):'<li class="empty">Aún no tienes rutinas. Crea la primera abajo (por ejemplo, tu rutina nocturna).</li>';
   }
   if(!pid)return '<li class="empty">Cuando tu gatito abra la app, su avance aparecerá aquí.</li>';
-  const all=theirs.map(h=>({...h,j:0})).concat(S.j.map(h=>({...h,j:1})));
-  if(!all.length)return `<li class="empty">${esc(pname())} aún no agrega hábitos.</li>`;
-  return all.map(h=>{const on=chk(pid,h.id),t=S.d[pid]?.[today()]?.t?.[h.id];return `<li class="row">${paw(on,h.id,true)}<div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}${h.j?' 💞':''}</span>${dots(k=>mark(pid,k,h.id))}${on&&t?`<small>Lo hizo a las ${esc(t)}</small>`:''}</div></li>`}).join('');
+  const all=theirs.map(h=>({...h,j:0})).concat(S.j.map(h=>({...h,j:1}))),rs=S.r[pid]||[];
+  if(!all.length&&!rs.length)return `<li class="empty">${esc(pname())} aún no agrega hábitos.</li>`;
+  return all.map(h=>{const on=chk(pid,h.id),t=day(pid,k).t?.[h.id],rest=!sched(h,k);return `<li class="row">${paw(on,h.id,true)}<div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}${h.j?' 💞':''}${flame(streak(h,pid))}</span>${dots(h,x=>mark(pid,x,h.id))}${rest?'<small>Hoy descansa 😴</small>':on&&t?`<small>Lo hizo a las ${esc(t)}</small>`:''}</div>${rest?'':purr(h.name,on)}</li>`}).join('')+(rs.length?`<li class="sec">Rutinas de ${esc(pname())}</li>`+rs.map(r=>routineCard(r,pid,false)).join(''):'');
 }
 function render(){
   if(!me)return;
-  const [a,b]=count(me),[c,d]=pid?count(pid):[0,0];
-  const el=$('#app');
+  const [a,b]=count(me),[c,d]=pid?count(pid):[0,0],el=$('#app');
   if(!el.dataset.ready){
     el.dataset.ready=1;
-    el.innerHTML=`<div class="hero" id="hero"></div><div class="tabs" role="tablist" id="tabs"></div><div class="bar"><span id="cap"></span><button id="ed" type="button"></button></div><ul id="list"></ul>
-    <form id="f"><select id="em" aria-label="Emoji">${['🐾','💧','😴','🏃','📚','🥗','💊','🧘','🌿','✨'].map(e=>`<option>${e}</option>`).join('')}</select><input id="nm" maxlength="60" placeholder="Nuevo hábito" aria-label="Nombre del hábito" autocomplete="off"><button type="submit">Agregar</button></form><p class="empty"><button class="lk" id="so" type="button">Cerrar sesión</button></p>`;
+    el.innerHTML=`<input type="file" id="pf" accept="image/*" hidden><div class="hero" id="hero"></div><div id="inbox"></div><div class="tabs" role="tablist" id="tabs"></div><div class="bar"><span id="cap"></span><button id="ed" type="button"></button></div><ul id="list"></ul>
+    <form id="f"><select id="em" aria-label="Emoji">${['🐾','💧','😴','🏃','📚','🥗','💊','🧘','🌿','✨'].map(e=>`<option>${e}</option>`).join('')}</select><input id="nm" maxlength="60" placeholder="Nuevo hábito" aria-label="Nombre del hábito" autocomplete="off"><button type="submit">Agregar</button><div class="dp" id="dp" aria-label="Días">${ORD.map(i=>`<button type="button" data-d="${i}" aria-pressed="true">${DOW[i]}</button>`).join('')}</div></form>
+    <form id="rf"><input id="rn" maxlength="60" placeholder="Nombre de la rutina (ej. Rutina nocturna)" aria-label="Nombre de la rutina" autocomplete="off"><input id="rt" type="time" aria-label="Hora meta"><textarea id="rp" rows="5" placeholder="Un paso por línea:&#10;Dejar el celular&#10;Lavarme los dientes&#10;Leer 10 minutos" aria-label="Pasos"></textarea><button type="submit">Crear rutina</button></form>
+    <p class="empty"><button class="lk" id="so" type="button">Cerrar sesión</button></p>`;
     $('#tabs').onclick=e=>{const t=e.target.closest('button');if(t){tab=t.dataset.t;edit=false;render()}};
     $('#ed').onclick=()=>{edit=!edit;render()};
     $('#list').onclick=onList;
-    $('#f').onsubmit=onAdd;
+    $('#f').onsubmit=onAdd;$('#rf').onsubmit=onAddR;
+    $('#dp').onclick=e=>{const t=e.target.closest('button');if(!t)return;const i=+t.dataset.d;sel=sel.includes(i)?sel.filter(x=>x!==i):[...sel,i];t.setAttribute('aria-pressed',sel.includes(i))};
+    $('#hero').onclick=e=>{if(e.target.closest('[data-a="photo"]'))$('#pf').click()};
+    $('#pf').onchange=onPhoto;
+    $('#inbox').onclick=e=>{if(e.target.closest('[data-a="seen"]')){try{localStorage.setItem('seen_'+me,Date.now())}catch(x){}render()}};
     $('#so').onclick=()=>signOut(auth).then(()=>location.reload());
+    $('#sheet').onclick=onSheet;$('#sheet').onsubmit=e=>{e.preventDefault();const t=$('#mt').value.trim();if(t)send(t,true)};
   }
-  $('#hero').innerHTML=`<div class="cc">${cat('#b9a4e6','#f7b6cf')}<b>Tú</b><span>${a}/${b} hoy</span></div><div class="heart" aria-hidden="true">♥</div><div class="cc">${cat('#f4b27a','#f7b6cf')}<b>${esc(pname())}</b><span>${pid?`${c}/${d} hoy`:'Esperando…'}</span></div>`;
-  $('#tabs').innerHTML=[['mine','Míos'],['joint','Juntos'],['his','De '+pname()]].map(([k,l])=>`<button type="button" role="tab" data-t="${k}" aria-selected="${tab===k}">${esc(l)}</button>`).join('');
-  $('#cap').textContent=tab==='mine'?'Tus hábitos de hoy':tab==='joint'?'Hábitos de los dos':'Solo lectura';
-  const ed=$('#ed');ed.hidden=tab==='his';ed.textContent=edit?'Listo':'Editar';
-  $('#f').hidden=tab==='his';
+  const av=(u,svg,mine)=>{const p=S.ph[u],ok=typeof p==='string'&&p.startsWith('data:image/'),inner=ok?`<img src="${esc(p)}" alt="">`:svg,cl=ok?'av':'av nop';return mine?`<button type="button" class="${cl}" data-a="photo" aria-label="Cambiar mi foto">${inner}</button>`:`<div class="${cl}">${inner}</div>`};
+  $('#hero').innerHTML=`<div class="cc">${av(me,cat('#c9a27a','#e8b9a6'),1)}<b>Tú</b><span>${a}/${b} hoy</span>${S.ph[me]?'':'<small class="cam">📷 Toca para poner tu foto</small>'}</div><div class="heart" aria-hidden="true">♥</div><div class="cc">${av(pid,cat('#8a5a3c','#e8b9a6'),0)}<b>${esc(pname())}</b><span>${pid?`${c}/${d} hoy`:'Esperando…'}</span></div>`;
+  let sn=0;try{sn=+localStorage.getItem('seen_'+me)||0}catch(x){}
+  const ms=(S.sent[pid]||[]).filter(m=>m.to===me&&Date.now()-m.t<2592e5).sort((x,y)=>y.t-x.t).slice(0,3);
+  $('#inbox').innerHTML=ms.length?`<div class="inb"><b>💌 ${esc(pname())} te dejó:</b>${ms.map(m=>`<p>${m.t>sn?'<em>nuevo</em> ':''}${esc(m.text)}<small> · ${esc(m.ref||'')} · ${ago(m.t)}</small></p>`).join('')}${ms.some(m=>m.t>sn)?'<button class="lk" data-a="seen" type="button">Listo</button>':''}</div>`:'';
+  $('#tabs').innerHTML=[['mine','Míos'],['joint','Juntos'],['rut','Rutinas'],['his','De '+pname()]].map(([k,l])=>`<button type="button" role="tab" data-t="${k}" aria-selected="${tab===k}">${esc(l)}</button>`).join('');
+  $('#cap').textContent={mine:'Tus hábitos de hoy',joint:'Hábitos de los dos',rut:'Tus rutinas',his:'Solo lectura · toca 💗 para animarle'}[tab];
+  $('#ed').hidden=tab==='his';$('#ed').textContent=edit?'Listo':'Editar';
+  $('#f').hidden=!(tab==='mine'||tab==='joint');$('#rf').hidden=tab!=='rut';
   $('#nm').placeholder=tab==='joint'?'Nuevo hábito juntos':'Nuevo hábito';
   $('#list').innerHTML=rows();
 }
-
+function mut(fn){const k=today(),cur=day(me,k),o={d:{...(cur.d||{})},t:{...(cur.t||{})},r:JSON.parse(JSON.stringify(cur.r||{}))};fn(o);(S.d[me]=S.d[me]||{})[k]=o;render();W(()=>setDoc(doc(db,`u/${me}/days/${k}`),o))}
 function onList(e){
   const b=e.target.closest('button[data-a]');if(!b)return;
-  const id=b.dataset.id;
-  if(b.dataset.a==='t'){
-    const k=today(),cur=S.d[me]?.[k]||{},d={...(cur.d||{})},t={...(cur.t||{})};
-    d[id]=!d[id];if(d[id])t[id]=new Date().toTimeString().slice(0,5);else delete t[id];
-    (S.d[me]=S.d[me]||{})[k]={d,t};render();
-    W(()=>setDoc(doc(db,`u/${me}/days/${k}`),{d,t}));
-  }else if(b.dataset.a==='del'){
-    W(()=>deleteDoc(doc(db,b.dataset.k==='j'?'joint/'+id:`u/${me}/habits/${id}`)));
-  }
+  const id=b.dataset.id,a=b.dataset.a;
+  if(a==='t')mut(o=>{o.d[id]=!o.d[id];if(o.d[id])o.t[id]=hm();else delete o.t[id]});
+  else if(a==='rs')mut(o=>{const m=o.r[b.dataset.r]=o.r[b.dataset.r]||{};if(m[id])delete m[id];else m[id]=hm()});
+  else if(a==='del'){const k=b.dataset.k;W(()=>deleteDoc(doc(db,k==='j'?'joint/'+id:k==='r'?`u/${me}/routines/${id}`:`u/${me}/habits/${id}`)))}
+  else if(a==='purr')openSheet(b.dataset.done==='1'?'celebrar':'motivar',b.dataset.ref);
 }
+function openSheet(kind,ref){
+  P={kind,ref};
+  PL=DEF[kind].map(t=>({t})).concat(S.ms.filter(m=>m.kind===kind).map(m=>({t:m.text,id:m.id})));
+  $('#sheet').innerHTML=`<div class="bk" data-a="close"></div><div class="pn" role="dialog" aria-label="Enviar ronroneo"><b>${kind==='celebrar'?'Celebrar con ':'Animar a '}${esc(pname())}</b><small class="mut">${esc(ref)}</small><ul>${PL.map((m,i)=>`<li><button class="msg" type="button" data-a="send" data-i="${i}">${esc(m.t)}</button>${m.id?`<button class="x" type="button" data-a="dmsg" data-id="${m.id}" aria-label="Quitar mensaje guardado">✕</button>`:''}</li>`).join('')}</ul><form id="mf"><input id="mt" maxlength="120" placeholder="Escribir el mío…" aria-label="Mi mensaje" autocomplete="off"><button type="submit">Enviar y guardar</button></form></div>`;
+  $('#sheet').hidden=false;
+}
+function onSheet(e){
+  const b=e.target.closest('[data-a]');if(!b)return;
+  if(b.dataset.a==='close')$('#sheet').hidden=true;
+  else if(b.dataset.a==='send')send(PL[+b.dataset.i].t,false);
+  else if(b.dataset.a==='dmsg'){const id=b.dataset.id;W(()=>deleteDoc(doc(db,`u/${me}/msgs/${id}`)));$('#sheet').hidden=true}
+}
+function send(text,save){
+  if(!pid)return;
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5),{kind,ref}=P;
+  W(()=>setDoc(doc(db,`u/${me}/sent/${id}`),{to:pid,text,ref,kind,t:Date.now()}));
+  if(save)W(()=>setDoc(doc(db,`u/${me}/msgs/${id}`),{text,kind}));
+  $('#sheet').hidden=true;toast('Ronroneo enviado 💗');
+}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function onAdd(e){
   e.preventDefault();
   const name=$('#nm').value.trim();if(!name)return;
-  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6),emoji=$('#em').value;
+  if(!sel.length)return toast('Elige al menos un día');
+  const id=uid(),emoji=$('#em').value,x={name,emoji,...(sel.length<7?{days:[...sel].sort()}:{})};
   $('#nm').value='';
-  W(()=>tab==='joint'?setDoc(doc(db,'joint/'+id),{name,emoji,by:me}):setDoc(doc(db,`u/${me}/habits/${id}`),{name,emoji}));
+  W(()=>tab==='joint'?setDoc(doc(db,'joint/'+id),{...x,by:me}):setDoc(doc(db,`u/${me}/habits/${id}`),x));
+}
+function onAddR(e){
+  e.preventDefault();
+  const name=$('#rn').value.trim(),steps=$('#rp').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,15);
+  if(!name||!steps.length)return toast('Ponle nombre y al menos un paso');
+  const r={name,emoji:'🌙',time:$('#rt').value||'',steps:steps.map((text,i)=>({id:'s'+i,text}))};
+  $('#rn').value='';$('#rp').value='';$('#rt').value='';
+  W(()=>setDoc(doc(db,`u/${me}/routines/${uid()}`),r));
+}
+async function shrink(f){const bm=await createImageBitmap(f),m=Math.min(bm.width,bm.height),N=256,c=document.createElement('canvas');c.width=c.height=N;c.getContext('2d').drawImage(bm,(bm.width-m)/2,(bm.height-m)/2,m,m,0,0,N,N);return c.toDataURL('image/jpeg',.82)}
+async function onPhoto(e){
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const photo=await shrink(f);S.ph[me]=photo;render();
+    W(()=>setDoc(doc(db,'people/'+me),{name:S.n[me]||pend||(auth.currentUser.email||'').split('@')[0],photo},{merge:true}))}
+  catch(err){toast('No pude usar esa foto, prueba con otra.')}
 }
 const msg=c=>({'auth/invalid-credential':'Correo o contraseña incorrectos','auth/email-already-in-use':'Ese correo ya tiene cuenta: usa Entrar','auth/weak-password':'La contraseña necesita mínimo 6 caracteres','auth/invalid-email':'Ese correo no es válido'}[c]||'No se pudo entrar');
 function showLogin(){
@@ -158,13 +245,15 @@ function start(u){
   if(started)return;started=true;me=u.uid;
   listen('mh',`u/${me}/habits`,s=>S.h[me]=docs(s));
   listen('md',`u/${me}/days`,s=>S.d[me]=dmap(s));
+  listen('mr',`u/${me}/routines`,s=>S.r[me]=docs(s));
+  listen('mm',`u/${me}/msgs`,s=>S.ms=docs(s));
   listen('j','joint',s=>S.j=docs(s));
   listen('p','people',s=>{
-    s.docs.forEach(x=>S.n[x.id]=x.data().name||'');
+    s.docs.forEach(x=>{S.n[x.id]=x.data().name||'';S.ph[x.id]=x.data().photo||''});
     const ids=s.docs.map(x=>x.id);
     if(!ids.includes(me)&&!reg){reg=true;W(()=>setDoc(doc(db,'people/'+me),{name:pend||(u.email||'').split('@')[0]}))}
     const o=ids.find(i=>i!==me);
-    if(o&&o!==pid){pid=o;listen('ph',`u/${o}/habits`,x=>S.h[o]=docs(x));listen('pd',`u/${o}/days`,x=>S.d[o]=dmap(x))}
+    if(o&&o!==pid){pid=o;listen('ph',`u/${o}/habits`,x=>S.h[o]=docs(x));listen('pd',`u/${o}/days`,x=>S.d[o]=dmap(x));listen('pr',`u/${o}/routines`,x=>S.r[o]=docs(x));listen('ps',`u/${o}/sent`,x=>S.sent[o]=docs(x))}
   });
   render();
 }
