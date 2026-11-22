@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gatitos en racha</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#fdf1f6;--card:#fff;--ink:#3b1f3a;--mut:#8a6a86;--pink:#e85d8a;--mint:#6fcfa8;--lav:#b9a4e6;--line:#f0d6e3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#241528;--card:#33203a;--ink:#fbe9f2;--mut:#c9a6c2;--line:#4a2f52;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#241528;--card:#33203a;--ink:#fbe9f2;--mut:#c9a6c2;--line:#4a2f52;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 'Nunito',system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+h1{font:600 26px 'Fredoka',sans-serif;margin:0 0 14px;text-align:center}
+.hero{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;background:var(--card);border:2px solid var(--line);border-radius:28px;padding:14px 10px}
+.cc{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;min-width:0}
+.cc b{font:600 17px 'Fredoka',sans-serif;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc span{color:var(--mut);font-size:14px}
+.heart{font-size:30px;color:var(--pink);animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@media (prefers-reduced-motion:reduce){.heart{animation:none}}
+.tabs{display:flex;gap:6px;margin:18px 0 10px}
+.tabs button{flex:1;font:600 15px 'Fredoka',sans-serif;padding:10px 6px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:10px 12px}
+.paw{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--bg);font-size:20px;cursor:pointer;color:var(--ink)}
+.paw.on{background:var(--mint);border-color:var(--mint);color:#16402f;font-weight:700}
+.paw:disabled{cursor:default;opacity:.85}
+.nm{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.nm span.t{overflow-wrap:anywhere;font-weight:600}
+.nm small{color:var(--mut)}
+.dots{display:flex;gap:5px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--pink)}
+.pair{display:flex;gap:6px}
+.x{flex:none;border:0;background:transparent;font-size:18px;color:var(--mut);cursor:pointer;padding:8px}
+.empty{text-align:center;color:var(--mut);padding:22px 10px}
+.bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px;color:var(--mut);font-size:14px}
+.bar button{border:0;background:none;color:var(--pink);font:600 14px 'Nunito',sans-serif;cursor:pointer;padding:6px}
+form{display:flex;gap:8px;margin-top:14px}
+form select,form input{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:10px}
+form select{flex:none}
+form input{flex:1;min-width:0}
+form button{flex:none;font:600 15px 'Fredoka',sans-serif;border:0;border-radius:16px;background:var(--pink);color:#fff;padding:0 16px;cursor:pointer}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+.col{flex-direction:column}form button.lk,.lk{background:none;color:var(--pink);padding:8px;border:0;cursor:pointer;font:600 14px Nunito,sans-serif}
+</style>
+</head>
+<body>
+<main>
+<h1>Gatitos en racha</h1>
+<div id="app"><p class="empty">Cargando…</p></div>
+</main>
+<div id="toast" role="status"></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getFirestore,collection,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+// Configuración de Firebase (proyecto gatitos-creciendo)
+const cfg={apiKey:"AIzaSyAiIMGTppRUujJ5Rz1pISMSlIWkGdtHvVM",authDomain:"gatitos-creciendo.firebaseapp.com",projectId:"gatitos-creciendo",appId:"1:439046611988:web:93bab5726349ca25bab301"};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>ymd(new Date());
+const last7=()=>[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return ymd(d)});
+const cat=(c,e)=>`<svg viewBox="0 0 80 72" width="72" height="66" aria-hidden="true"><path d="M10 30 L14 4 L34 16Z M70 30 L66 4 L46 16Z" fill="${c}"/><path d="M15 14 L17 9 L26 15Z M65 14 L63 9 L54 15Z" fill="${e}"/><ellipse cx="40" cy="42" rx="31" ry="26" fill="${c}"/><circle cx="29" cy="40" r="3.4" fill="#2a1830"/><circle cx="51" cy="40" r="3.4" fill="#2a1830"/><circle cx="30" cy="39" r="1" fill="#fff"/><circle cx="52" cy="39" r="1" fill="#fff"/><path d="M37 47h6l-3 3.5z" fill="#e85d8a"/><path d="M40 50.5v2M40 52.5q-3 3-6 1M40 52.5q3 3 6 1" stroke="#2a1830" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="22" cy="48" rx="4.5" ry="2.8" fill="${e}" opacity=".7"/><ellipse cx="58" cy="48" rx="4.5" ry="2.8" fill="${e}" opacity=".7"/></svg>`;
+
+
+let me,pid=null,tab='mine',edit=false,reg=false,pend='',creating=false,started=false,db,auth;
+const S={h:{},d:{},j:[],n:{}};
+const subs={};
+let q=Promise.resolve();
+const W=f=>{q=q.then(f).catch(()=>toast('No se pudo guardar. Revisa tu conexión.'))};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),3500)}
+const docs=s=>s.docs.map(x=>({id:x.id,...x.data()}));
+const dmap=s=>{const m={};s.docs.forEach(x=>m[x.id]=x.data()||{});return m};
+function listen(k,path,fn){if(subs[k])return;subs[k]=onSnapshot(collection(db,path),s=>{fn(s);render()},()=>toast('No pude leer los datos compartidos.'))}
+const chk=(u,id)=>!!(S.d[u]?.[today()]?.d||{})[id];
+const count=u=>{const ids=(S.h[u]||[]).map(h=>h.id).concat(S.j.map(j=>j.id));return [ids.filter(i=>chk(u,i)).length,ids.length]};
+const dots=(f)=>`<span class="dots" aria-hidden="true">${last7().map(k=>`<i class="${f(k)?'on':''}"></i>`).join('')}</span>`;
+const mark=(u,k,id)=>!!(S.d[u]?.[k]?.d||{})[id];
+const paw=(on,id,dis)=>`<button class="paw ${on?'on':''}" ${dis?'disabled':`data-a="t" data-id="${id}"`} aria-pressed="${on}" aria-label="${on?'Hecho':'Pendiente'}">${on?'✓':'🐾'}</button>`;
+const pname=()=>S.n[pid]||'Tu gatito';
+
+function rows(){
+  const mine=S.h[me]||[],theirs=S.h[pid]||[];
+  if(tab==='mine'){
+    if(!mine.length)return '<li class="empty">Aún no tienes hábitos. Agrega el primero abajo.</li>';
+    return mine.map(h=>`<li class="row">${paw(chk(me,h.id),h.id)}<div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}</span>${dots(k=>mark(me,k,h.id))}</div>${edit?`<button class="x" data-a="del" data-k="m" data-id="${h.id}" aria-label="Borrar">✕</button>`:''}</li>`).join('');
+  }
+  if(tab==='joint'){
+    if(!S.j.length)return '<li class="empty">Aún no tienen hábitos juntos. Agreguen el primero abajo.</li>';
+    return S.j.map(h=>`<li class="row"><div class="pair">${paw(chk(me,h.id),h.id)}${pid?paw(chk(pid,h.id),h.id,true):''}</div><div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}</span>${dots(k=>mark(me,k,h.id)&&pid&&mark(pid,k,h.id))}<small>${chk(me,h.id)&&pid&&chk(pid,h.id)?'¡Los dos lo lograron hoy!':'Se cuenta cuando ambos lo marcan'}</small></div>${edit?`<button class="x" data-a="del" data-k="j" data-id="${h.id}" aria-label="Borrar">✕</button>`:''}</li>`).join('');
+  }
+  if(!pid)return '<li class="empty">Cuando tu gatito abra la app, su avance aparecerá aquí.</li>';
+  const all=theirs.map(h=>({...h,j:0})).concat(S.j.map(h=>({...h,j:1})));
+  if(!all.length)return `<li class="empty">${esc(pname())} aún no agrega hábitos.</li>`;
+  return all.map(h=>{const on=chk(pid,h.id),t=S.d[pid]?.[today()]?.t?.[h.id];return `<li class="row">${paw(on,h.id,true)}<div class="nm"><span class="t">${esc(h.emoji)} ${esc(h.name)}${h.j?' 💞':''}</span>${dots(k=>mark(pid,k,h.id))}${on&&t?`<small>Lo hizo a las ${esc(t)}</small>`:''}</div></li>`}).join('');
+}
+function render(){
+  if(!me)return;
+  const [a,b]=count(me),[c,d]=pid?count(pid):[0,0];
+  const el=$('#app');
+  if(!el.dataset.ready){
+    el.dataset.ready=1;
+    el.innerHTML=`<div class="hero" id="hero"></div><div class="tabs" role="tablist" id="tabs"></div><div class="bar"><span id="cap"></span><button id="ed" type="button"></button></div><ul id="list"></ul>
+    <form id="f"><select id="em" aria-label="Emoji">${['🐾','💧','😴','🏃','📚','🥗','💊','🧘','🌿','✨'].map(e=>`<option>${e}</option>`).join('')}</select><input id="nm" maxlength="60" placeholder="Nuevo hábito" aria-label="Nombre del hábito" autocomplete="off"><button type="submit">Agregar</button></form><p class="empty"><button class="lk" id="so" type="button">Cerrar sesión</button></p>`;
+    $('#tabs').onclick=e=>{const t=e.target.closest('button');if(t){tab=t.dataset.t;edit=false;render()}};
+    $('#ed').onclick=()=>{edit=!edit;render()};
+    $('#list').onclick=onList;
+    $('#f').onsubmit=onAdd;
+    $('#so').onclick=()=>signOut(auth).then(()=>location.reload());
+  }
+  $('#hero').innerHTML=`<div class="cc">${cat('#b9a4e6','#f7b6cf')}<b>Tú</b><span>${a}/${b} hoy</span></div><div class="heart" aria-hidden="true">♥</div><div class="cc">${cat('#f4b27a','#f7b6cf')}<b>${esc(pname())}</b><span>${pid?`${c}/${d} hoy`:'Esperando…'}</span></div>`;
+  $('#tabs').innerHTML=[['mine','Míos'],['joint','Juntos'],['his','De '+pname()]].map(([k,l])=>`<button type="button" role="tab" data-t="${k}" aria-selected="${tab===k}">${esc(l)}</button>`).join('');
+  $('#cap').textContent=tab==='mine'?'Tus hábitos de hoy':tab==='joint'?'Hábitos de los dos':'Solo lectura';
+  const ed=$('#ed');ed.hidden=tab==='his';ed.textContent=edit?'Listo':'Editar';
+  $('#f').hidden=tab==='his';
+  $('#nm').placeholder=tab==='joint'?'Nuevo hábito juntos':'Nuevo hábito';
+  $('#list').innerHTML=rows();
+}
+
+function onList(e){
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const id=b.dataset.id;
+  if(b.dataset.a==='t'){
+    const k=today(),cur=S.d[me]?.[k]||{},d={...(cur.d||{})},t={...(cur.t||{})};
+    d[id]=!d[id];if(d[id])t[id]=new Date().toTimeString().slice(0,5);else delete t[id];
+    (S.d[me]=S.d[me]||{})[k]={d,t};render();
+    W(()=>setDoc(doc(db,`u/${me}/days/${k}`),{d,t}));
+  }else if(b.dataset.a==='del'){
+    W(()=>deleteDoc(doc(db,b.dataset.k==='j'?'joint/'+id:`u/${me}/habits/${id}`)));
+  }
+}
+function onAdd(e){
+  e.preventDefault();
+  const name=$('#nm').value.trim();if(!name)return;
+  const id=Date.now().toString(36)+Math.random().toString(36).slice(2,6),emoji=$('#em').value;
+  $('#nm').value='';
+  W(()=>tab==='joint'?setDoc(doc(db,'joint/'+id),{name,emoji,by:me}):setDoc(doc(db,`u/${me}/habits/${id}`),{name,emoji}));
+}
+const msg=c=>({'auth/invalid-credential':'Correo o contraseña incorrectos','auth/email-already-in-use':'Ese correo ya tiene cuenta: usa Entrar','auth/weak-password':'La contraseña necesita mínimo 6 caracteres','auth/invalid-email':'Ese correo no es válido'}[c]||'No se pudo entrar');
+function showLogin(){
+  const el=$('#app');delete el.dataset.ready;
+  el.innerHTML=`<form id="lf" class="col"><input id="le" type="email" placeholder="Correo" autocomplete="email" required><input id="lp" type="password" placeholder="Contraseña" autocomplete="current-password" minlength="6" required><input id="ln" placeholder="Tu nombre (así te verá tu gatito)" maxlength="30" hidden><button type="submit" id="lb">Entrar</button><button type="button" class="lk" id="lt">Crear cuenta</button></form>`;
+  $('#lt').onclick=()=>{creating=!creating;$('#ln').hidden=!creating;$('#lb').textContent=creating?'Crear cuenta':'Entrar';$('#lt').textContent=creating?'Ya tengo cuenta':'Crear cuenta'};
+  $('#lf').onsubmit=async e=>{e.preventDefault();const em=$('#le').value.trim().toLowerCase(),pw=$('#lp').value;
+    try{if(creating){pend=$('#ln').value.trim();await createUserWithEmailAndPassword(auth,em,pw)}else await signInWithEmailAndPassword(auth,em,pw)}catch(err){toast(msg(err.code))}};
+}
+function start(u){
+  if(started)return;started=true;me=u.uid;
+  listen('mh',`u/${me}/habits`,s=>S.h[me]=docs(s));
+  listen('md',`u/${me}/days`,s=>S.d[me]=dmap(s));
+  listen('j','joint',s=>S.j=docs(s));
+  listen('p','people',s=>{
+    s.docs.forEach(x=>S.n[x.id]=x.data().name||'');
+    const ids=s.docs.map(x=>x.id);
+    if(!ids.includes(me)&&!reg){reg=true;W(()=>setDoc(doc(db,'people/'+me),{name:pend||(u.email||'').split('@')[0]}))}
+    const o=ids.find(i=>i!==me);
+    if(o&&o!==pid){pid=o;listen('ph',`u/${o}/habits`,x=>S.h[o]=docs(x));listen('pd',`u/${o}/days`,x=>S.d[o]=dmap(x))}
+  });
+  render();
+}
+if(cfg.apiKey.startsWith('PEGA')){
+  $('#app').innerHTML='<p class="empty">Falta pegar la configuración de Firebase en index.html.</p>';
+}else{
+  db=getFirestore(initializeApp(cfg));auth=getAuth();
+  onAuthStateChanged(auth,u=>{if(u)start(u);else showLogin()});
+}
+</script>
+</body>
+</html>
